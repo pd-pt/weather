@@ -18,7 +18,7 @@ class GeoDecoderAPIService:
         resp = requests.get(self.get_url(city_name)).json()
         if resp['response']['GeoObjectCollection']['metaDataProperty']['GeocoderResponseMetaData']['found'] == '0':
             raise CityNotFound
-        lat, long = resp['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos'].split(' ')
+        long, lat = resp['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos'].split(' ')
         return (float(lat), float(long))
 
 class WeatherAPIService:
