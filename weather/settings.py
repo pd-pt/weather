@@ -17,6 +17,10 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True),
     SECRET_KEY=(str, 'django-insecure-mhe!9tb=32_$)&d082(=^4!_m=5l&)x^ajf*5pj#i*y(bpojjl'),
+    TG_BOT_TOKEN=(str, 'bot_token'),
+    GEO_DECODER_API_KEY=(str, 'api_key'),
+    WEATHER_API_KEY=(str, 'api_key'),
+    DB_HOST=(str, 'localhost'),
 )
 
 from pathlib import Path
@@ -25,6 +29,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+TG_BOT_TOKEN = env('TG_BOT_TOKEN')
+GEO_DECODER_API_KEY = env('GEO_DECODER_API_KEY')
+WEATHER_API_KEY = env('WEATHER_API_KEY')
+DB_HOST = env('DB_HOST')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -93,7 +102,7 @@ DATABASES = {
         "NAME": "weather",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "HOST": "localhost",
+        "HOST": DB_HOST,
         "PORT": "5432",
     }
 }

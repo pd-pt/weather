@@ -1,11 +1,15 @@
 import requests
 import datetime
+from django.conf import settings
 
 from .models import City, WeatherRequest
 from django.core.cache import cache
 
+class CityNotFound(Exception):
+    pass
+
 class GeoDecoderAPIService:
-    API_KEY = '1988adbd-ce7e-4322-9c3c-5728ea289416'
+    API_KEY = settings.GEO_DECODER_API_KEY # '1988adbd-ce7e-4322-9c3c-5728ea289416'
 
     def get_url(self, city_name):
         return 'https://geocode-maps.yandex.ru/1.x/?apikey={}&geocode={}&format=json'.format(self.API_KEY, city_name)
@@ -13,13 +17,13 @@ class GeoDecoderAPIService:
     def find_city_coords(self, city_name):
         resp = requests.get(self.get_url(city_name)).json()
         if resp['response']['GeoObjectCollection']['metaDataProperty']['GeocoderResponseMetaData']['found'] == '0':
-            raise Exception('City not found')
+            raise CityNotFound
         lat, long = resp['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['Point']['pos'].split(' ')
         return (float(lat), float(long))
 
 class WeatherAPIService:
     headers = {
-        'X-Yandex-Weather-Key': 'a3fe20fe-1a21-451e-87ca-f9d0ab096a77'
+        'X-Yandex-Weather-Key': settings.WEATHER_API_KEY # 'a3fe20fe-1a21-451e-87ca-f9d0ab096a77'
     }
     cache_seconds = 30 * 60
     def get_url(self, lat, long):
@@ -29,9 +33,7 @@ class WeatherAPIService:
         cache_key = 'weather_{}_{}'.format(lat, long)
         cached = cache.get(cache_key)
         if cached:
-            print('from cache', cache_key)
             return cached
-        print('from api', cache_key)
         resp = requests.get(self.get_url(lat, long), headers=self.headers).json()
         result = {
             'temp': resp['fact']['temp'],
