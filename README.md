@@ -18,3 +18,13 @@
 ## Or use only docker compose to run the project: 
 
 `docker compose up`
+
+# Running tests
+
+`. ./venv/bin/activate`
+
+`pytest`
+
+# TG bot
+
+https://t.me/weather_test23_bot

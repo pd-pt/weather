@@ -9,7 +9,7 @@ class CityNotFound(Exception):
     pass
 
 class GeoDecoderAPIService:
-    API_KEY = settings.GEO_DECODER_API_KEY # '1988adbd-ce7e-4322-9c3c-5728ea289416'
+    API_KEY = settings.GEO_DECODER_API_KEY
 
     def get_url(self, city_name):
         return 'https://geocode-maps.yandex.ru/1.x/?apikey={}&geocode={}&format=json'.format(self.API_KEY, city_name)
@@ -23,7 +23,7 @@ class GeoDecoderAPIService:
 
 class WeatherAPIService:
     headers = {
-        'X-Yandex-Weather-Key': settings.WEATHER_API_KEY # 'a3fe20fe-1a21-451e-87ca-f9d0ab096a77'
+        'X-Yandex-Weather-Key': settings.WEATHER_API_KEY
     }
     cache_seconds = 30 * 60
     def get_url(self, lat, long):
